@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- <record id="hr_payroll.act_hr_employee_payslip_list" model="ir.actions.act_window">
+        <field name="res_model">hr.payslip</field>
+        <field name="name">Payslips</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_employee_id': [active_id], 'default_employee_id':
+            active_id}
+        </field>
+        <field name="domain">[('employee_id','=',active_id),('state','in',['done', 'paid'])]</field>
+    </record>-->
+
+    <record id="view_payslip_information" model="ir.ui.view">
+        <field name="name">view.payslip.information</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet/group/field[@name='struct_id']" position="after">
+                <field name="nbre_parts_trimf"/>
+                <field name="trimf"/>
+                <!-- <field name="mode_paiement"/>
+                <field name="employ_matr"/>
+                <field name="bank"/>
+                <field name="bank_number"/> -->
+                <field name="salaire_brut" invisible="1"/>
+                <field name="salaire_net" invisible="1"/>
+                <field name="salaire_moyen" invisible="1"/>
+                <field name="indemn_licenciement" invisible="1"/>
+                <field name="indemn_retraite" invisible="1"/>
+                <field name="indemn_deces" invisible="1"/>
+                <field name="indemn_fin_cdd" invisible="1"/>
+                <field name="cumul_salaire_brut" invisible="1"/>
+                <field name="cumul_charges_salariales" invisible="1"/>
+                <field name="cumul_charges_patronales" invisible="1"/>
+                <field name="cumul_heures_travail" invisible="1"/>
+                <field name="total_imposable" invisible="1"/>
+                <!--<field name="avance" invisible="1"/>-->
+                <!--<field name="leaves" invisible="1"/>-->
+                <!--<field name="loan_ids" invisible="1"/>-->
+                <!--<field name="total_avance" invisible="1"/> -->
+                <field name="montant_anciennete" invisible="1"/> 
+                <field name="total_cotisation_employe" invisible="1"/>
+                <field name="total_cotisation_employeur" invisible="1"/>
+                <field name="total_non_imposable" invisible="1"/>
+                <field name="total_cotisation" invisible="1"/>
+                <field name="salaire_base" invisible="1"/>
+                <field name="sursalaire" invisible="1"/>
+                <field name="montant_allocation_familiale" invisible="1"/>
+                <field name="montant_accident_travail" invisible="1"/>
+                <field name="montant_cfce" invisible="1"/>
+                <field name="impot_revenu" invisible="1"/>
+                <field name="base_fiscal_abatt" invisible="1"/>
+                <field name="montant_ipress_general_employee" invisible="1"/>
+                <field name="montant_ipress_general_employeur" invisible="1"/>
+                <field name="montant_ipress_cadre_employe" invisible="1"/>
+                <field name="montant_ipress_cadre_employeur" invisible="1"/>
+                <field name="all_cotisation_employe_general" invisible="1"/>
+                <field name="all_cotisation_employeur_general" invisible="1"/>
+                <field name="all_cotisation_employe_cadre" invisible="1"/>
+                <field name="all_cotisation_employeur_cadre" invisible="1"/>
+                <field name="total_ipress_cadre" invisible="1"/>
+                <field name="total_ipress_general" invisible="1"/>
+                <field name="total_ipress" invisible="1"/>
+                <field name="total_retenue" invisible="1"/>
+                <field name="base_global_general" invisible="1"/>
+                <field name="base_global_cadre" invisible="1"/>
+                <field name="indemnite_transport" invisible="1"/>
+                <field name="regime_general_employe_employeur" invisible="1"/>
+                <field name="regime_cadre_employe_employeur" invisible="1"/>
+                <field name="caisse_ss" invisible="1"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='worked_days_input']/field[@name='worked_days_line_ids']" position="replace">
+                <field name="worked_days_line_ids" readonly="state in ['cancel', 'done', 'paid']" invisible=" not use_worked_day_lines">
+                    <list string="Worked Days" editable="bottom" create="0" delete="0">
+                        <field name="work_entry_type_id" readonly="1" force_save="1"/>
+                        <field name="name"/>
+                        <field name="number_of_days" sum="Total Working Days" force_save="1"/>
+                        <field name="number_of_hours"  widget="float_time" sum="Total Working Hours" force_save="1"/>
+                        <field name="amount" readonly="1" sum="Total Amount" force_save="1"/>
+                        <field name="ytd" readonly="1" force_save="1"
+                            column_invisible="not parent.ytd_computation"
+                            optional="show"/>
+                        <field name="is_paid" readonly="1" column_invisible="True" force_save="1"/>
+                        <field name="sequence" readonly="1" column_invisible="True" force_save="1"/>
+                        <field name="currency_id" column_invisible="True"/>
+                    </list>
+                    <form string="Worked Day">
+                        <group col="4">
+                            <field name="work_entry_type_id"/>
+                            <field name="name"/>
+                            <field name="sequence"/>
+                            <field name="number_of_days"/>
+                            <field name="number_of_hours" widget="float_time"/>
+                            <field name="amount"/>
+                            <field name="ytd" readonly="1" invisible="not parent.ytd_computation"/>
+                            <field name="is_paid"/>
+                            <field name="contract_id"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </form>
+                </field>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- <record id="hr_nrt_contributions_view_tree" model="ir.ui.view">
+        <field name="name">hr.nrt.contributions.view.tree</field>
+        <field name="model">nrt.contributions</field>
+        <field name="arch" type="xml">
+            <list string="Cotisations sociales">
+                <field name="name" />
+                <field name="date_from"/>
+                <field name="date_to"/> -->
+                <!-- <field name="ipress_regime_general" invisible="1"/>
+                <field name="ipress_regime_cadre" invisible="1"/>
+                <field name="report_ipress_general_employee" invisible="1"/>
+                <field name="report_ipress_general_employeur" invisible="1"/>
+                <field name="report_ipress_cadre_employe" invisible="1"/>
+                <field name="report_ipress_cadre_employeur" invisible="1"/>
+                <field name="report_alloc_familiales" invisible="1"/>
+                <field name="report_accident_travail" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="reprot_total_css" invisible="1"/>
+                <field name="reprot_impot_revenu" invisible="1"/>
+                <field name="reprot_trimf" invisible="1"/>
+                <field name="reprot_total_impot" invisible="1"/>
+                <field name="totat_ipress" invisible="1"/>
+                <field name="base_general" invisible="1"/>
+                <field name="base_cadre" invisible="1"/> -->
+            <!-- </list>
+        </field>
+    </record> -->
+
+    <!-- <record id="hr_nrt_retenue_view_tree" model="ir.ui.view">
+        <field name="name">hr.nrt.retenue.view.tree</field>
+        <field name="model">nrt.retenue</field>
+        <field name="arch" type="xml">
+            <list string="Retenues fiscales">
+                <field name="name" />
+                <field name="date_from"/>
+                <field name="date_to"/>
+            </list>
+        </field>
+    </record> -->
+
+    <!-- <record id="hr_nrt_retenue_view_form" model="ir.ui.view">
+        <field name="name">hr.nrt.retenue.view.form</field>
+        <field name="model">nrt.retenue</field>
+        <field name="arch" type="xml">
+            <form string="Retenues fiscales">
+                <field name="name" />
+                <group>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </group>
+            </form>
+        </field>
+    </record> -->
+
+    <!-- <record id="nrt_fichier_controle_view_tree" model="ir.ui.view">
+        <field name="name">nrt.fichier.controle.view.tree</field>
+        <field name="model">nrt.fichier.controle</field>
+        <field name="arch" type="xml">
+            <list string="Fichier contrôle">
+                <field name="name" />
+                <field name="date_from"/>
+                <field name="date_to"/>
+            </list>
+        </field>
+    </record> -->
+
+    <!-- <record id="nrt_fichier_controle_form" model="ir.ui.view">
+        <field name="name">nrt.fichier.controle.view.form</field>
+        <field name="model">nrt.fichier.controle</field>
+        <field name="arch" type="xml">
+            <form string="Fichier Contrôle">
+                <field name="name" />
+                <group>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </group>
+            </form>
+        </field>
+    </record> -->
+
+    <record id="hr_nrt_livre_paie_view_tree" model="ir.ui.view">
+        <field name="name">hr.nrt.livre.paie.view.tree</field>
+        <field name="model">nrt.livre.paie</field>
+        <field name="arch" type="xml">
+            <list string="Livre de paie">
+                <field name="name" />
+                <field name="date_from" />
+                <field name="date_to" />
+                <!-- <field name="sal_base" invisible="1"/>
+                <field name="sur_sal" invisible="1"/>
+                <field name="carburant" invisible="1"/>
+                <field name="conge_paye" invisible="1"/>
+                <field name="avan_nat" invisible="1"/>
+                <field name="restau" invisible="1"/>
+                <field name="indemn_preavis" invisible="1"/>
+                <field name="prime_transp" invisible="1"/>
+                <field name="brut_impos" invisible="1"/>
+                <field name="imp_rev" invisible="1"/>
+                <field name="trimf" invisible="1"/>
+                <field name="ipres_rg" invisible="1"/>
+                <field name="ipres_rg_pat" invisible="1"/>
+                <field name="ipres_rc_pat" invisible="1"/>
+                <field name="ipres_rc" invisible="1"/>
+                <field name="total_cot" invisible="1"/>
+                <field name="retenue_assur" invisible="1"/>
+                <field name="total_ret" invisible="1"/>
+                <field name="total_salar" invisible="1"/>
+                <field name="total_patr" invisible="1"/>
+                <field name="net_payer" invisible="1"/> -->
+                <field name="company_id" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="hr_bos_livre_paie_view_form" model="ir.ui.view">
+        <field name="name">hr.nrt.livre.paie.view.form</field>
+        <field name="model">nrt.livre.paie</field>
+        <field name="arch" type="xml">
+            <form string="Livre de paie">
+                <field name="name" />
+                <group>
+                <field name="date_from" />
+                </group>
+                <group>
+                <field name="date_to" />
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <!-- <record id="act_hr_employee_payslip_list" model="ir.actions.act_window">
+        <field name="res_model">hr.payslip</field>
+        <field name="name">Payslips</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_employee_id': [active_id], 'default_employee_id': active_id}</field>
+    </record>
+
+    <record id="view_employee_private_information" model="ir.ui.view">
+        <field name="name">view.employee.private.information</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name = "priority" eval="30" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="nrt_sirh_payroll_18.act_hr_employee_payslip_list"
+                        class="oe_stat_button"
+                        icon="fa-money"
+                        type="action"
+                        invisible="not show_payslip">
+                    <field name="payslip_count" widget="statinfo" string="Bulletins paie"/>
+                </button>
+            </xpath>
+        </field>
+    </record> -->
+
+  <!--  <record id="action_hr_bos_saving_id" model="ir.actions.act_window">
+        <field name="name">CHEBOS</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.saving</field>
+        <field name="binding_model_id" ref="hr.model_hr_saving"/>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_employee_id': [active_id], 'default_employee_id': active_id}</field>
+        <field name="domain">[('employee_id','=',active_id)]</field>
+        <field name="view_id" eval="hr_bos_saving_view_tree"/>
+    </record>
+
+    <record id="hr_bos_saving_view_button" model="ir.ui.view">
+        <field name="name">hr.bos.saving.view.button</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <button id="hr_presence_button" position="after">
+            <div name="button_box" position="inside">
+                <button name="action_hr_bos_saving_id"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-pencil-square-o"
+                        attrs="{'invisible':[('show_payslip','=',False)]}">
+                    <field name="amount_saving" widget="statinfo" options="{'always_reload': true}" string="Montant CHEBOS"/>
+                </button>
+                <button name="action_amebos_saving_id"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-pencil-square-o"
+                        attrs="{'invisible':[('show_payslip','=',False)]}"
+                >
+                    <field name="amount_saving_amebos" widget="statinfo" options="{'always_reload': true}" string="Montant AMEBOS"/>
+                </button>
+            </button>
+            </div>
+        </field>
+    </record>
+
+    <record id="view_contract_information" model="ir.ui.view">
+        <field name="name">view.contract.information</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/notebook/page[2]/group/group[1]/div[@name='wage']"
+                   position="after">
+                <field name="sursalaire"/>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='information']" position="replace">
+                <page name="information" groups="bos_odoo.group_admin_rh, bos_odoo.group_assistant_rh, bos_odoo.group_resp_paie"/>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[2]/group" position="replace">
+                <group string="Eléments du salarié">
+                    <group>
+                        <field name="wage"/>
+                        <field name="sursalaire"/>
+                    </group>
+                    <group>
+                        <field name="carburant"/>
+                        <field name="rappel"/>
+                        <field name="avantage_nat"/>
+                    </group>
+                </group>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[2]/group" position="after">
+                <group string="Primes">
+                    <group>
+                        <field name="prime_excep"/>
+                        <field name="prime_fonct"/>
+                        <field name="prime_salissure"/>
+                        <field name="restaurant"/>
+                        <field name="prime_rend"/>
+                    </group>
+                    <group>
+                        <field name="prime_tel"/>
+                        <field name="prime_logement"/>
+                        <field name="indemnite_transport"/>
+                        <field name="prime_fin_annee"/>
+                    </group>
+                </group>
+                <group string="Avances">
+                    <group>
+                        <field name="acompte_salaire"/>
+                        <field name="avance_tabaski"/>
+                        <field name="date_acompte"/>
+                    </group>
+                    <group>
+                        <field name="avance_korite"/>
+                        <field name="avance_noel"/>
+                    </group>
+                </group>
+                <group string="Retenues">
+                    <group>
+                        <field name="retenue_assurance"/>
+                    </group>
+                </group>
+                <group string="Indemnités">
+                    <group>
+                        <field name="indemnite_preavis"/>
+                        <field name="compens_preavis"/>
+                    </group>
+                    <group>
+                        <field name="indemnite_conge"/>
+                    </group>
+                </group>
+            </xpath>
+
+            <xpath expr="//form/sheet/notebook/page[@name='information']" position="replace">
+                <page name="information" groups="bos_odoo.group_admin_rh, bos_odoo.group_assistant_rh, bos_odoo.group_resp_paie"/>
+            </xpath>
+
+            <xpath expr="//form/sheet/group/group[2]/field[@name='job_id']" position="replace">
+                <field name="job_id" readonly="1"/>
+            </xpath>
+            <xpath expr="//form/sheet/group/group[1]/field[@name='structure_type_id']" position="replace">
+                <field name="structure_type_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//form/sheet/group/group[1]/field[@name='structure_type_id']" position="after">
+                <field name="structure_name_id"/>
+            </xpath>
+            <xpath expr="//form/sheet/group/group[2]/field[@name='contract_type_id']"
+                   position="after">
+                <field name="category"/>
+                <field name="parent_id" readonly="1"/> 
+                <field name="trimf"/>
+            </xpath>
+            <xpath expr="//form/sheet/group/group[2]/field[@name='hr_responsible_id']"
+                   position="replace">
+                <field name="hr_responsible_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[2]/group/group[1]"
+                   position="after">
+                <group string="Primes">
+                    <field name="prime_excep"/>
+                    <field name="prime_respons"/>
+                    <field name="prime_salissure"/>
+                    <field name="restaurant"/>
+                    <field name="prime_rend"/>
+                </group>
+                <group>
+                    <field name="prime_risque"/>
+                    <field name="prime_logement"/>
+                    <field name="indemnite_transport"/>
+                    <field name="prime_fin_annee"/>
+                    &lt;!&ndash;                    <field name="anciennete"/>&ndash;&gt;
+                    &lt;!&ndash;                    <field name="indemnite_conge"/>&ndash;&gt;
+                    &lt;!&ndash;                    <field name="treizieme_mois"/>&ndash;&gt;
+                    &lt;!&ndash;                    <field name="indemnite_fonction"/>&ndash;&gt;
+                    &lt;!&ndash;                    <field name="indemnite_telephone"/>&ndash;&gt;
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="disable_salary_type_information_contract_view" model="ir.ui.view">
+        <field name="name">disable.salary.type.information.contract.view</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_payroll.hr_contract_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='wage_type']" position="replace">
+                <field name="wage_type" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_salary_categories_tree" model="ir.ui.view">
+        <field name="name">view.hr.salary.categories.tree</field>
+        <field name="model">hr.salary</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_holiday_leave_tree" model="ir.ui.view">
+        <field name="name">view.holiday.leave.tree</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='employee_id']" position="after">
+                <field name="employe_fin_conge" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_salary_categories_form" model="ir.ui.view">
+        <field name="name">view.hr.salary.categories.form</field>
+        <field name="model">hr.salary</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="salary"/>
+                    </group>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_bos_compte_analytique_produit_bailleur_id" model="ir.ui.view">
+        <field name="name">hr.bos.compte.analytique.produit.bailleur.id</field>
+        <field name="model">account.analytic.account</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group[1]/field[@name='code']" position="after">
+                <field name="analytic_product" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_bos_budget_exec_global" model="ir.ui.view">
+        <field name="name">hr.bos.budget.exec.global</field>
+        <field name="model">crossovered.budget</field>
+        <field name="inherit_id" ref="account_budget.crossovered_budget_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group[2]/field[@name='company_id']" position="after">
+                <field name="global_exec"/>
+                <field name="montant_prevu" invisible="1"/>
+                <field name="montant_reel" invisible="1"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='budget_lines']/field[@name='crossovered_budget_line']/tree/field[@name='percentage']" position="replace">
+                <field name="percentage" string="Réalisation(%)"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_bos_lot_paiement_id" model="ir.ui.view">
+        <field name="name">hr.bos.lot.paiement.id</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header/button[@name='action_validate']" position="replace">
+                <button name="action_validate" type="object" string="COMPTABILISER" states="verify" class="oe_highlight" context="{'payslip_generate_pdf': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_bos_budget_analyse_tree" model="ir.ui.view">
+        <field name="name">view.bos.budget.analyse.tree</field>
+        <field name="model">crossovered.budget.lines</field>
+        <field name="inherit_id" ref="account_budget.view_crossovered_budget_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree/field[@name='percentage']" position="replace">
+                <field name="percentage" string="Réalisation(%)"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_menu_hr_category_salary" model="ir.actions.act_window">
+        <field name="name">Salaires catégoriels</field>
+        <field name="res_model">hr.salary</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer une catégorie
+            </p>
+        </field>
+    </record>
+
+    <record id="action_menu_hr_contract_type" model="ir.actions.act_window">
+        <field name="name">Types de contrat</field>
+        <field name="res_model">hr.contract.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un type de contrat
+            </p>
+        </field>
+    </record>-->
+
+    <!--<record id="action_report_cotisation_id" model="ir.actions.act_window">
+        <field name="name">Cotisations sociales</field>
+        <field name="res_model">bos.cotisation.ipres</field>
+        <field name="view_mode">form</field>
+    </record>-->
+
+    <!-- <record id="action_report_cotisation" model="ir.actions.act_window">
+        <field name="name">Cotisations sociales</field>
+        <field name="res_model">nrt.contributions</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" eval="hr_nrt_contributions_view_tree"/>
+    </record> -->
+
+    <!-- <record id="action_report_retenue" model="ir.actions.act_window">
+        <field name="name">Retenues fiscales</field>
+        <field name="res_model">nrt.retenue</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" eval="hr_nrt_retenue_view_tree"/>
+    </record> -->
+    
+    <!-- <record id="action_report_fichier_controle" model="ir.actions.act_window">
+        <field name="name">Fichier contrôle paie</field>
+        <field name="res_model">nrt.fichier.controle</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" eval="nrt_fichier_controle_view_tree"/>
+    </record> -->
+
+    <record id="action_report_livre_paie" model="ir.actions.act_window">
+        <field name="name">Livre de paie</field>
+        <field name="res_model">nrt.livre.paie</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" eval="hr_nrt_livre_paie_view_tree"/>
+    </record>
+
+    <!-- <record id="action_send_dce" model="ir.actions.server">
+        <field name="name">Fichier de contrôle</field>
+        <field name="model_id" ref="hr_payroll.model_hr_payslip"/>
+        <field name="binding_model_id" ref="hr_payroll.model_hr_payslip"/>
+        <field name="state">code</field>
+        <field name="code">
+            if records:
+                action = records.nrt_report_controle_id()
+        </field>
+    </record> -->
+
+    <!--<record id="action_menu_hr_bos_saving" model="ir.actions.act_window">
+        <field name="name">CHEBOS</field>
+        <field name="res_model">hr.saving.chebos</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="hr_bos_saving_view_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un type de contrat
+            </p>
+        </field>
+     </record>
+
+    <record id="action_menu_amebos" model="ir.actions.act_window">
+        <field name="name">AMEBOS</field>
+        <field name="res_model">hr.saving.amebos</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="hr_amebos_view_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créer un type de contrat
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+            id="menu_hr_category_salary"
+            name="Catégories"
+            action="action_menu_hr_category_salary"
+            parent="hr.menu_human_resources_configuration"
+            sequence="3"
+    />
+
+    <menuitem
+            id="menu_hr_contract_type"
+            name="Type de contrat"
+            action="action_menu_hr_contract_type"
+            parent="hr.menu_human_resources_configuration"
+            sequence="4"
+    />
+
+    <menuitem
+            id="menu_hr_bos_saving"
+            name="CHEBOS"
+            action="action_menu_hr_bos_saving"
+            parent="hr_payroll.menu_hr_salary_configuration"
+            sequence="4"
+    />
+
+    <menuitem
+            id="menu_hr_amebos"
+            name="AMEBOS"
+            action="action_menu_amebos"
+            parent="hr_payroll.menu_hr_salary_configuration"
+            sequence="5"
+    />
+
+    <menuitem id="hr_work_entry_contract_enterprise.menu_hr_payroll_work_entries_root" active="false"/>
+
+    <menuitem
+            id="menu_hr_payroll_social_contribution"
+            name="Rapports"
+            parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root"
+            sequence="65"
+    />-->
+
+     <menuitem
+        id="menu_hr_payroll_social_contribution"
+        name="Rapports"
+        parent="hr_payroll.menu_hr_payroll_report"
+        sequence="40"
+        /> 
+
+    <!--<menuitem
+            id="menu_hr_payroll_cotisation"
+            name="sociales"
+            action="action_report_cotisation_id"
+            parent="menu_hr_payroll_social_contribution"
+            sequence="50"
+    />-->
+
+    <!-- <menuitem
+            id="menu_hr_payroll_cotisation"
+            name="Cotisations ipress"
+            action="action_report_cotisation"
+            parent="menu_hr_payroll_social_contribution"
+            sequence="50"
+    /> -->
+
+    <!-- <menuitem
+            id="menu_hr_payroll_retenue"
+            name="Retenues fiscales"
+            action="action_report_retenue"
+            parent="menu_hr_payroll_social_contribution"
+            sequence="60"
+    /> -->
+
+    <menuitem
+            id="menu_hr_payroll_bos_livre_paie"
+            name="Livre de paie"
+            action="action_report_livre_paie"
+            parent="menu_hr_payroll_social_contribution"
+            sequence="70"
+    />
+
+    <!-- <menuitem
+            id="menu_hr_payroll_fichier_controle"
+            name="Fichier de contrôle"
+            action="action_report_fichier_controle"
+            parent="menu_hr_payroll_social_contribution"
+            sequence="80"
+    />  -->
+
+</odoo>

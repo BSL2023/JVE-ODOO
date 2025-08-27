@@ -1,0 +1,330 @@
+<odoo>
+
+    <record id="report_bos_livre_paie" model="ir.actions.report">
+        <field name="name">Livre paie</field>
+        <field name="model">nrt.livre.paie</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">nrt_sirh_payroll_18.report_livre_paie_id</field>
+        <field name="report_file">nrt_sirh_payroll_18.report_livre_paie_id</field>
+        <field name="binding_model_id" ref="model_nrt_livre_paie"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="nrt_sirh_payroll_18.paperformat_payslip_group"/>
+    </record>
+
+    <template id="report_livre_paie_id">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+
+                    <t t-set="slips" t-value="o.get_payslips_book()"/>
+                    <t t-set="employee_groups" t-value="[[slips[i:i+6] for i in range(0, len(slips), 6)]]"/>
+                    <t t-foreach="employee_groups" t-as="group">
+
+                        <div class="page">
+
+                            <t t-foreach="group" t-as="slip">
+
+                                <div>
+                                    <center>
+                                        <img t-if="o.company_id.logo"
+                                             t-att-src="image_data_uri(o.company_id.logo)"
+                                             style="max-height: 110px;max-width: 120px;" alt="Logo"/>
+                                    </center>
+
+
+                                    <center>
+                                        <span class="bpro_text_italic" style="padding-left:25px">
+                                            <span t-field="o.company_id.street"/>
+                                        </span>
+                                    </center>
+
+                                    <center>
+                                        <span style="font-size:20px;height: 20px">LIVRE DE PAIE</span>
+                                    </center>
+                                    <center>
+                                        <span t-esc="time.strftime('%B %Y',time.strptime(str(o.date_from),'%Y-%m-%d')).capitalize()"/>
+                                    </center>
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+
+                                <TABLE width="100%" style="border:solid 1px;">
+                                    <TR valign="middle" style="border:solid 1px;">
+                                        <TD align="center" style="border-right:solid 1px; background-color: #C0C0C0">
+                                            <strong>COLLABORATEURS</strong>
+                                        </TD>
+
+                                        <!--<t t-foreach="o.get_payslips_book()" t-as="payslip">-->
+
+                                        <t t-foreach="slip" t-as="s">
+                                            <td align="center" style="border-right:solid 1px;">
+                                                <strong>
+                                                    <span t-field="s.employee_id.name"/>
+                                                </strong>
+                                            </td>
+                                        </t>
+                                    </TR>
+
+                                    <TR style="border-top:solid 1px;">
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Salaire de base
+                                        </TD>
+                                        <!--<t t-foreach="o.get_payslips_book()" t-as="payslip">-->
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.salaire_base"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Sursalaire
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.sursalaire"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Carburant
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.contract_id.carburant"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Avantage en nature
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.contract_id.avantage_nat"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Restauration
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.contract_id.restaurant"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Indemnité de préavis
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.indemn_preavis"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Prime de Transport
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.contract_id.prime_transport"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Prime de salissure
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.prime_salissure"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Prime exceptionnelle
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.contract_id.prime_excep"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR style="border:solid 1px;">
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            <strong>BRUT IMPOSABLE</strong>
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.salaire_brut"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Impôt sur le revenu
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.impot_revenu"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            TRIMF
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.trimf"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            IPRES RG
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.montant_ipress_general_employee"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            IPRES RG PAT
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.montant_ipress_general_employeur"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            IPRES RC
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.montant_ipress_cadre_employe"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            IPRES RC PAT
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.montant_ipress_cadre_employeur"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR style="border:solid 1px;">
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            <strong>TOTAL COTISATIONS</strong>
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-esc="s.montant_ipress_cadre_employeur + s.montant_ipress_cadre_employe + s.montant_ipress_general_employee + s.montant_ipress_general_employeur"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Retenue assurance maladie
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.contract_id.retenue_assurance"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Total Retenues
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.avance"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Total Charges salariales
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.total_cotisation_employe"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Total Charges Patronales
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.total_cotisation_employeur"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+                                    <TR style="border:solid 1px;">
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            <strong>NET A PAYER</strong>
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.salaire_net"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                </TABLE>
+                                <div style="page-break-before: always;"/>
+                            </t>
+
+                            <div class="footer o_standard_footer">
+                                <div class="text-center">
+                                    <span class="page"/>/
+                                    <span class="topage"/>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

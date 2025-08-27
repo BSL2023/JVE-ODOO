@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="custom_footer" inherit_id="web.html_container">
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <xpath expr="//div[@t-attf-class='footer o_standard_footer o_company_#{company.id}_layout']" position="replace">
+           <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+               <div class="text-center" style="border-top: 1px solid black;">
+                   <h5 style="color:black;">
+                       <b><t t-esc="company.name"/></b>
+                   </h5>
+                   <h6 style="color:black;">Your company details</h6>
+                   Page:
+                   <span class="page"/>/<span class="topage"/>
+               </div>
+           </div>
+       </xpath>
+
+    </template>
+
+
+</odoo>
