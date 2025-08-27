@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_employee_form_inherit" model="ir.ui.view">
+        <field name="name">view.employee.form.inherit.jve</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="priority" eval="60"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group/group[1]" position="before">
+                <group string="Embauche">
+                    <field name="hire_date"/>
+                    <field name="seniority_year"/>
+                    <field name="seniority_months"/>
+                </group>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group/group[@name='emergency']/field[@name='spouse_complete_name']" position="replace">
+                <field name="spouse_complete_name" invisible="1"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group/group[@name='emergency']/field[@name='spouse_birthdate']" position="replace">
+                <field name="spouse_birthdate" invisible="1"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group/group[@name='emergency']/field[@name='children']" position="replace">
+                <field name="children" invisible="marital not in ['married', 'cohabitant']"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group/group[@name='emergency']/field[@name='marital']" position="before">
+                <field name="husband_wife_status" invisible="marital not in ['married', 'cohabitant']"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group/group[@name='emergency']/field[@name='children']" position="after">
+                <field name="nbre_parts"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,2642 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="paperformat_payslip_group" model="report.paperformat">
+        <field name="name">European A4 Portrait</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">4</field>
+        <field name="margin_right">4</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+        <field name="css_margins" eval="True" />
+    </record>
+
+    <record id="hr_payroll.action_report_payslip" model="ir.actions.report">
+        <field name="name">Payslip</field>
+        <field name="model">hr.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_payroll.report_payslip_lang</field>
+        <field name="report_file">hr_payroll.report_payslip_lang</field>
+        <field name="print_report_name">'Payslip - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_hr_payslip"/>
+        <field name="binding_type">report</field>
+        <field name="attachment"></field>
+        <field name="attachment_use" eval="False"/>
+        <field name="paperformat_id" ref="jve_payroll.paperformat_payslip_group"/>
+    </record>
+
+    <template id="layout_external" inherit_id="web.external_layout_standard">
+        <xpath expr="//div[@t-attf-class='header o_company_#{company.id}_layout']" position="replace">
+            <div t-attf-class="header o_company_#{company.id}_layout"></div>
+        </xpath>
+    </template>
+
+    <template id="hr_payroll.report_payslip">
+        <t t-call="web.external_layout">
+        <!-- <t t-call="web.html_container"> -->
+            <meta charset="utf-8"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-call="jve_payroll.headerless_layout">
+                    <t t-set="o" t-value="o.with_context({'lang': lang})"/>
+                    <div class="page">
+                        <t t-call="jve_payroll.header_new"/>
+                        <div>
+                            <div class="bpro_header_left">
+                                
+                                <div>
+                                    <table class="bpro-width" style="border-bottom:10px">
+                                        <tbody>
+                                            <tr style="border-bottom:10px">
+                                                <td class="jve-background" style="text-align:left;padding-left:10px">Nom et Prénom(s)</td>
+                                                <td style="text-align:center">
+                                                    <span t-field="o.employee_id.name"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="bpro-width" style="border-bottom:10px">
+                                        <tbody>
+                                            <tr style="border-bottom:10px">
+                                                <td class="jve-background" style="text-align:left;padding-left:10px">
+                                                    Adresse
+                                                </td>
+                                                <td style="text-align:center">
+                                                    <span t-field="o.employee_id.address_id"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="bpro-width" style="border-bottom:10px">
+                                        <tbody>
+                                            <tr style="border-bottom:10px">
+                                                <td class="jve-background" style="text-align:left;padding-left:10px">
+                                                    Emploi
+                                                </td>
+                                                <td style="text-align:center">
+                                                    <span t-field="o.employee_id.job_id"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="bpro-width" style="border-bottom:10px">
+                                        <tbody>
+                                            <tr style="border-bottom:10px">
+                                                <td class="jve-background" style="text-align:left;padding-left:10px">
+                                                    C.C.N
+                                                </td>
+                                                <td style="text-align:center">
+                                                    Commerce
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="bpro-width" style="border-bottom:10px">
+                                        <tbody>
+                                            <tr style="border-bottom:10px">
+                                                <td class="jve-background" style="text-align:left;padding-left:10px">
+                                                    Catégorie
+                                                </td>
+                                                <td style="text-align:center">
+                                                    <span t-field="o.contract_id.category"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                    
+                                </div>
+                            </div>
+                            <div class="bpro_header_right">
+                                <center>
+                                    <img t-if="o.company_id.logo"
+                                         t-att-src="image_data_uri(o.company_id.logo)"
+                                         style="max-height: 110px;max-width: 120px;" alt="Logo"/>
+                                </center>
+                                <div>
+                                    <div>
+                                        <center>
+                                            <span class="bpro_text_italic" style="padding-left:25px">
+                                                <span t-field="o.company_id.street"/>
+                                            </span>
+                                        </center>
+                                   </div>
+                                   <div>
+                                       <center>
+                                           <span style="font-size:20px;height: 20px">BULLETIN DE PAIE</span>
+                                       </center>
+                                   </div>
+                                </div>
+                                <table class="bpro-width">
+                                    <tbody>
+                                        
+                                        <tr>
+                                            <th class="date-method-paiement">
+                                                Période du
+                                                <span t-field="o.date_from"/>
+                                                à
+                                                <span t-field="o.date_to"/>
+                                            </th>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <table class="bpro_contained bpro-width">
+                                <tr class="bpro_border_head">
+                            
+                                    <th rowspan="2" class="bpro_head bpro_head_label_first bproll-header-padding">
+                                        Rubriques
+                                    </th>
+                                    <th rowspan="2"
+                                         class="bpro_border_left bpro_space text-right bpro_head_label_second bproll-header-padding"
+                                         style="text-align:center">BASE
+                                    </th>
+                                    <th rowspan="2"
+                                        class="bpro_border_left bpro_head  bpro_head_label_third bproll-header-padding"
+                                        style="text-align:center">Taux (%)
+                                    </th>
+                                    <th rowspan="2"
+                                        class="bpro_border_left bpro_head bprol_head_label_fourth"
+                                        style="border-right:1px solid">
+                                        Part. Employés
+                                    </th>
+                                    <th rowspan="2"
+                                        class="bpro_border_left bpro_head bprol_head_label_fourth"
+                                        style="border-right:1px solid">
+                                        Part. Patronales
+                                    </th>
+                                    
+                                </tr>
+                                <!-- <tr class="bpro_border_head">
+                                    <th class="bproll_right_head bpro_head_label_third">Gain</th>
+                                    <th class="text-right bpro_head_label_third"
+                                        style="border-right:1px solid">Retenues
+                                    </th>
+                                    <th class="bproll_right_head bpro_head_label_third">Gain</th>
+                                    <th class="text-right bpro_head_label_third"
+                                        style="border-right:1px solid">Retenues
+                                    </th>
+
+                                </tr> -->
+
+                                <tbody>
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Salaire de base</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'SB' and line.amount > 0.0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'SB' and line.amount > 0.0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Sursalaire</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'SURS' and line.amount > 0.0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'SURS' and line.amount > 0.0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INTRANSP' and line.amount > 26000">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Indemnité de transport</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INTRANSP' and line.amount > 26000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INTRANSP' and line.amount > 26000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INTEL' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Indemnité de téléphone</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INTEL' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INTEL' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INLOG' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Indemnité de logement</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INLOG' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INLOG' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'CBR' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Indemnité de carburant</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'CBR' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'CBR' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INRESP' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Indemnité de responsabilité</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INRESP' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INRESP' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INKIL' and line.amount > 50000">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Indemnité kilométrique</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INKIL' and line.amount > 50000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INKIL' and line.amount > 50000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'PRPAN' and line.amount > 54000">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Prime de panier</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PRPAN' and line.amount > 54000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PRPAN' and line.amount > 54000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <!--<tr class="bproll-espace-top">-->
+                                    <tr class="sous-totaux">
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center><strong>TOTAL BRUT</strong></center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                           
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <strong>
+                                                <hr></hr>
+                                            </strong>
+                                            <strong>
+                                                <t t-foreach="o.line_ids" t-as="line">
+                                                    <t t-if="line.code == 'SBI' and line.amount > 0">
+                                                        <span t-field="line.amount"/>
+                                                    </t>
+                                                </t>
+                                            </strong>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+
+                                    <!--    -->
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>CFCE</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <span t-field="o.base_calcul_allocation"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            3.0
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center; border-right:1px solid;">
+                                            <strong>
+                                                <hr></hr>
+                                            </strong>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'CFCE'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Allocations familiales</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <span t-field="o.base_calcul_allocation"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            7.0
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center; border-right:1px solid;">
+                                            
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PREST'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Accident de travail</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <span t-field="o.base_calcul_allocation"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            3.0
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center; border-right:1px solid;">
+                                            
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'ACT'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <t t-if="o.struct_id.name in ['Régime cadre','Régime non cadre']">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Ipres RG Pat</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.base_calcul_ipress_general"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            8,4
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px; border-right:1px solid; border-left:1px solid;">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RGPAT' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    <t t-if="o.struct_id.name in ['Régime cadre']">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Ipres RC Pat</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.base_calcul_ipress_cadre"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            3,6
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px; border-right:1px solid;">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RCPAT' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    <t t-if="o.struct_id.name in ['Régime cadre','Régime non cadre']">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Ipres RG</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.base_calcul_ipress_general"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            5,6
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px; border-left:1px solid;">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RG' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    <t t-if="o.struct_id.name in ['Régime cadre']">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Ipres RC</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.base_calcul_ipress_cadre"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+
+                                            2,4
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px; border-left:1px solid;">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RC' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Trimf</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'TRIMF'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px; border-left:1px solid;">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'TRIMF'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Impôt sur le revenu</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.salaire_brut"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px; border-left:1px solid;">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'IR'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                    </tr>
+
+                                    <!--<tr class="bproll-espace-top">-->
+                                    <tr class="sous-totaux">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                               <center><strong>TOTAL COTISATIONS</strong></center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px; border-left:1px solid;">
+                                            <strong>
+                                                <hr></hr>
+                                            </strong>
+                                            <strong>
+                                                <t t-foreach="o.line_ids" t-as="line">
+                                                    <t t-if="line.code == 'TCS'">
+                                                        <span t-field="line.amount"/>
+                                                    </t>
+                                                </t>
+                                            </strong>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px; border-left:1px solid;">
+                                            <strong>
+                                                <hr></hr>
+                                            </strong>
+                                            <strong>
+                                                <t t-foreach="o.line_ids" t-as="line">
+                                                    <t t-if="line.code == 'TCP'">
+                                                        <span t-field="line.amount"/>
+                                                    </t>
+                                                </t>
+                                            </strong>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bproll-espace-top">
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <strong>
+                                                <hr></hr>
+                                            </strong>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                            <strong>
+                                                <hr></hr>
+                                            </strong>
+                                        </td>
+                                    </tr>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INTRANSP' and 1 &lt;= line.amount &lt;= 26000">
+                                    <tr class="bproll-espace-top">
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Indemnité de transport</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INTRANSP' and 1 &lt;= line.amount &lt;= 26000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INTRANSP' and 1 &lt;= line.amount &lt;= 26000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INKIL' and 1 &lt;= line.amount &lt;= 50000">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Indemnité kilométrique</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INKIL' and 1 &lt;= line.amount &lt;= 50000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INKIL' and 1 &lt;= line.amount &lt;= 50000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'PRPAN' and 1 &lt;= line.amount &lt;= 54000">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Prime de panier</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PRPAN' and 1 &lt;= line.amount &lt;= 54000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'IPRPAN' and 1 &lt;= line.amount &lt;= 54000">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <tr class="sous-totaux">
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center><strong>TOTAL NON IMPOSABLE</strong></center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                           
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <!--<strong>
+                                                <hr></hr>
+                                            </strong>-->
+                                            <strong>
+                                                <t t-foreach="o.line_ids" t-as="line">
+                                                    <t t-if="line.code == 'TNI' and line.amount > 0">
+                                                        <span t-field="line.amount"/>
+                                                    </t>
+                                                </t>
+                                            </strong>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+
+                                    <!-- <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Sursalaire
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'SURS' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'AVNAT' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Avantage en nature
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'AVNAT' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'RAPPSAL' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Rappel de salaire
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RAPPSAL' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INDTRANS' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Indemnité de transport
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INDTRANS' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'PREXCEP' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Prime exceptionnelle
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PREXCEP' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'PRRES' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Prime de responsabilité
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PRRES' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'PRREND' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Prime de rendement
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PRREND' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'PRRISQUE' and line.amount > 0">
+                                        <tr class="bproll-espace-top">
+
+                                            <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Prime de risque
+                                            </td>
+                                            <td class="bpro_border_left bpro_head_label_second"
+                                                style="text-align:center">
+                                                <t t-if="o.worked_days_line_ids">
+                                                    <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                                </t>
+                                                <t t-else="">
+                                                    30
+                                                </t>
+                                            </td>
+                                            <td class="bpro_border_left bpro_head_label_third"
+                                                style="text-align:center">
+                                            </td>
+                                            <td class="bpro_border_left bpro_head_label_second"
+                                                style="text-align:center">
+                                            </td>
+
+                                            <td style="text-align:left;border-left: 1px solid">
+                                                <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PRRISQUE' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                            </td>
+                                            <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                            </td>
+                                            <td class="bpro_head_label_third"
+                                                style="text-align:right;padding-right:2px">
+                                            </td>
+                                            <td class="bpro_head_label_third"
+                                                style="text-align:right;padding-right:2px">
+                                            </td>
+
+                                        </tr>
+                                        </t>
+                                        </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INDEMNLOG' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Indemnité de logement
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INDEMNLOG' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INDEMPREA' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Indemnité de préavis
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INDEMPREA' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'IDMNDEPLAC' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Indemnité de déplacement
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'IDMNDEPLAC' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'REST' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Allocation Restauration
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'REST' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+                            
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'PRFNAN' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Prime de fin d'année
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PRFNAN' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INFINCDD' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Indemnité de fin de contrat
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INFINCDD' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'CMLJRHEB' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Rémunération cumu jours hebdomadaires
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'CMLJRHEB' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == '13MOIS' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Treizième mois
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == '13MOIS' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'PRBLAN' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Prime de bilan
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PRBLAN' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                               <strong>TOTAL BRUT</strong>
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                           <strong><hr></hr></strong>
+                                          <strong>
+                                              <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'SBI'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                          </strong>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                CFCE
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.salaire_brut"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            3
+                                        </td>
+                                        <td style="text-align:right;border-left: 1px solid">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'CFCE'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Allocations familiales
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.base_calcul_allocation"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            7
+                                        </td>
+                                        <td style="text-align:right;border-left: 1px solid">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PREST'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Accident de travail
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.base_calcul_accident_travail"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            1
+                                        </td>
+                                        <td style="text-align:right;border-left: 1px solid">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'ACT'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <t t-if="o.struct_id.name in ['Régime cadre','Régime non cadre']">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Ipres RG Pat
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.base_calcul_ipress_general"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            8,4
+                                        </td>
+                                        <td style="text-align:right;border-left: 1px solid">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RGPAT' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    <t t-if="o.struct_id.name in ['Régime cadre']">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Ipres RC Pat
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.base_calcul_ipress_cadre"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            3,6
+                                        </td>
+                                        <td style="text-align:right;border-left: 1px solid">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RCPAT' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    <t t-if="o.struct_id.name in ['Régime cadre','Régime non cadre']">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Ipres RG
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.base_calcul_ipress_general"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+
+                                            5,6
+                                        </td>
+                                        <td style="text-align:right;border-left: 1px solid">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RG' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    <t t-if="o.struct_id.name in ['Régime cadre']">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Ipres RC
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.base_calcul_ipress_cadre"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+
+                                            2,4
+                                        </td>
+                                        <td style="text-align:right;border-left: 1px solid">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RC' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Trimf
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.nbre_parts_trimf"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            100
+                                        </td>
+                                        <td style="text-align:right;border-left: 1px solid">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'TRIMF'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Impôt sur le revenu
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <span t-field="o.salaire_brut"/>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            100
+                                        </td>
+                                        <td style="text-align:right;border-left: 1px solid">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'IR'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                    </tr>
+
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                               <strong>TOTAL COTISATIONS</strong>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                            <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+
+                                        </td>
+                                        <td style="text-align:right;border-left: 1px solid">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                            <strong>
+                                                <hr></hr>
+                                            </strong>
+                                            <strong>
+                                                <t t-foreach="o.line_ids" t-as="line">
+                                                    <t t-if="line.code == 'TCS'">
+                                                        <span t-field="line.amount"/>
+                                                    </t>
+                                                </t>
+                                            </strong>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                            <strong>
+                                                <hr></hr>
+                                            </strong>
+                                            <strong>
+                                                <t t-foreach="o.line_ids" t-as="line">
+                                                    <t t-if="line.code == 'TCP'">
+                                                        <span t-field="line.amount"/>
+                                                    </t>
+                                                </t>
+                                            </strong>
+                                        </td>
+                                    </tr>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'RAT' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Assurance maladie
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RAT'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'RIPM' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Retenue IPM
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RIPM'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'RPA' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Retenue prêt
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RPA'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'COMPREA' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Compensation de préavis
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'COMPREA'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'PT' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Prime de transport
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PT'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INDEMNSPEC' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Indemnité spéciale
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INDEMNSPEC'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INDEC' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Indemnité de décés
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INDEC'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INRETR' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Indemnité de départ à la retraite
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INRETR'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INLIC' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Indemnité de licenciement
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INLIC'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'PRSALISS' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Prime de salissure
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'PRSALISS'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'CBR' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                Carburant
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'CBR'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                               <strong>TOTAL NON IMPOSABLE</strong>
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                             <t t-if="o.worked_days_line_ids">
+                                                <span t-field="o.worked_days_line_ids[0].number_of_days"/>
+                                            </t>
+                                            <t t-else="">
+                                                30
+                                            </t>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                            <strong><hr></hr></strong>
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'TNI'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:right;padding-right:2px">
+                                        </td>
+
+                                    </tr>
+
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third">
+                                        </td>
+
+                                    </tr>
+
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third">
+                                        </td>
+
+                                    </tr>
+
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                        </td>
+                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
+                                        </td>
+
+                                        <td style="text-align:left;border-left: 1px solid">
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third"
+                                            style="text-align:right;padding-right:2px">
+                                        </td>
+                                        <td class="bpro_head_label_third">
+                                        </td>
+
+                                    </tr> -->
+
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                        <div class="bpro_div_bottom">
+                            <div>
+                            <table class="bpro_footer_table_second bpro-width">
+                                <tr class="bpro_footer_border">
+                                   <td colspan="5" height="50" class="bpro_padding_year" style="border-top:1px solid; height:50px; vertical-align: middle;">
+                                        <center>NET A PAYER</center>
+                                    </td>
+                                    <td colspan="2" class="bpro_border_fourth bpro_head bpro_border_left bpro_padding_top"
+                                         style="background-color: #C0C0C0; height:50px; vertical-align: middle;">
+                                         <t t-foreach="o.line_ids" t-as="line">
+                                            <t t-if="line.code == 'NET'">
+                                                <span t-field="line.amount"/>
+                                            </t>
+                                        </t>
+                                    </td>
+
+                                </tr>
+                            </table>
+                            </div>
+                        </div>
+
+                        <!-- <div class="bpro_div_bottom">
+                            <div>
+                            <table class="bpro_footer_table_second bpro-width">
+                                <tr class="bpro_footer_border">
+                                   <td class="bpro_padding_year" style="border-top:1px solid">
+                                        Cumuls
+                                    </td>
+
+                                    <td class="bpro_footer_third bpro_head bpro_border_left bpro_padding_top">
+                                         Net imposable
+                                     </td>
+
+                                     <td class="bpro_footer_third bpro_head bpro_border_left bpro_padding_top">
+                                         Charges Salariales
+                                    </td>
+                                     <td class="bpro_footer_third bpro_head bpro_border_left bpro_padding_top">
+                                         Charges Patronales
+                                    </td>
+                                    <td class="bpro_footer_third bpro_head bpro_border_left bpro_padding_top">
+                                         Heures travaillées
+                                    </td>
+                                    <td colspan="2" class="bpro_border_fourth bpro_head bpro_border_left bpro_padding_top"
+                                         style="background-color: #C0C0C0">Net à payer
+                                    </td>
+
+                                </tr>
+
+                                    <tr class="bpro_label_second">
+
+                                        <td class="bpro_padding_year">
+                                                Période
+                                        </td>
+                                        <td class="bpro_head bpro_padding_bottom_footer">
+                                            <span t-field="o.salaire_brut"/>
+                                        </td>
+                                        <td class="bpro_head bpro_padding_bottom_footer">
+                                        <span t-field="o.total_cotisation_employe"/>
+                                        </td>
+                                        <td class="bpro_head bpro_padding_bottom_footer">
+                                            <span t-field="o.total_cotisation_employeur"/>
+                                        </td>
+                                        <td class="bpro_head bpro_padding_bottom_footer">
+                                        <span t-field="o.worked_days_line_ids[0].number_of_hours"/>
+                                        </td>
+                                        <td colspan="2" rowspan="2" class="bpro_font_balance bpro_head"
+                                            style="background-color: #C0C0C0">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'NET'">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+
+                                    </tr>
+
+                                    <tr class="bpro_label_second">
+
+                                        <td class="bpro_padding_year">
+                                                Année
+                                        </td>
+                                        <td class="bpro_head bpro_padding_bottom_footer">
+                                            <span t-field="o.cumul_salaire_brut"/>
+                                        </td>
+                                        <td class="bpro_head bpro_padding_bottom_footer">
+                                        <span t-field="o.cumul_charges_salariales"/>
+                                        </td>
+                                        <td class="bpro_head bpro_padding_bottom_footer">
+                                            <span t-field="o.cumul_charges_patronales"/>
+                                        </td>
+                                        <td class="bpro_head bpro_padding_bottom_footer">
+                                            <span t-field="o.cumul_heures_travail"/>
+                                        </td>
+
+                                    </tr>
+
+                            </table>
+                            </div>
+                    </div> -->
+                    <div style="padding-top:20px;font-style: italic;font-size:14px">
+                        Dans votre interêt et pour vous aider à faire valoir vos droits, conserver ce bulletin de paie sans limitation de durée.
+                    </div>
+                </div>
+
+                </t>
+
+                <div class="footer o_standard_footer">
+                    <div class="text-center" style="border-top: 1px solid black;">
+                        <ul class="list-inline mb4">
+                            <li class="list-inline-item">Téléphone:
+                                <span t-field="o.company_id.phone"/>
+                            </li>
+                            <li class="list-inline-item">Email:
+                                <span t-field="o.company_id.email"/>
+                            </li>
+                            <li class="list-inline-item">Web:
+                                <span t-field="o.company_id.website"/>
+                            </li>
+                        </ul>
+                        <div t-if="report_type == 'pdf'" class="text-muted">
+                            Page:
+                            <span class="page"/>
+                            /
+                            <span class="topage"/>
+                        </div>
+                    </div>
+                </div>
+
+            </t>
+
+        </t>
+
+    </template>
+
+</odoo>
+
+
+
+
