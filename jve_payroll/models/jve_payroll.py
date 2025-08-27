@@ -281,15 +281,10 @@ class PayrollValues(models.Model):
     taux_accident_travail = fields.Float("Taux accident travail", compute="_compute_cotisation", store=True)
     trimf = fields.Integer("Trimf", compute="_compute_trimf", store=True)
     nbre_parts_trimf = fields.Integer("Nombre de parts Trimf", compute="_compute_trimf", store=True)
-    cumul_salaire_brut = fields.Integer("Cumul des salaires brut", compute="_compute_cumul_salaire", store=True)
-    cumul_charges_salariales = fields.Integer("Cumul charges salariales", compute="_compute_cumul_salaire", store=True)
-    cumul_charges_patronales = fields.Integer("Cumul charges patronales", compute="_compute_cumul_salaire", store=True)
-    cumul_heures_travail = fields.Float("Cumul heures travaillées", compute="_compute_cumul_salaire", store=True)
     total_imposable = fields.Float("Total brut", compute="_compute_cotisation", store=True)
     total_cotisation_employe = fields.Float("Total cotisation employé", compute="_compute_cotisation", store=True)
     total_cotisation_employeur = fields.Float("Total cotisation employeur", compute="_compute_cotisation", store=True)
     total_non_imposable = fields.Float("Total non imposable", compute="_compute_cotisation", store=True)
-    # loan_ids = fields.Many2one('hr.loan.line', string="Prêts", readonly=True)
     montant_anciennete = fields.Float("Montant de l'ancienneté", compute="_compute_salaire", store=True)
     all_cotisation_employe_general = fields.Float("Ensemble cotisation employé général",
                                                   compute="_compute_all_cotisation_employe",
