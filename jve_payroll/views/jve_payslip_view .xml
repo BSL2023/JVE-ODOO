@@ -31,15 +31,7 @@
                 <field name="indemn_retraite" invisible="1"/>
                 <field name="indemn_deces" invisible="1"/>
                 <field name="indemn_fin_cdd" invisible="1"/>
-                <field name="cumul_salaire_brut" invisible="1"/>
-                <field name="cumul_charges_salariales" invisible="1"/>
-                <field name="cumul_charges_patronales" invisible="1"/>
-                <field name="cumul_heures_travail" invisible="1"/>
                 <field name="total_imposable" invisible="1"/>
-                <!--<field name="avance" invisible="1"/>-->
-                <!--<field name="leaves" invisible="1"/>-->
-                <!--<field name="loan_ids" invisible="1"/>-->
-                <!--<field name="total_avance" invisible="1"/> -->
                 <field name="montant_anciennete" invisible="1"/> 
                 <field name="total_cotisation_employe" invisible="1"/>
                 <field name="total_cotisation_employeur" invisible="1"/>
