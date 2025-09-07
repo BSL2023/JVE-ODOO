@@ -5,8 +5,10 @@ class ContractInformations(models.Model):
     _inherit = 'hr.contract'
 
     indemnite_transport = fields.Float("Indemnité de transport", store=True)
+    indemnite_transport_impos = fields.Float("Indemnité de transport (imposable)", store=True)
     indemnite_tel = fields.Float("Indemnité de téléphone", store=True)
-    prime_panier = fields.Float("Indemnité compensatrice", store=True)
+    prime_panier = fields.Float("Prime de panier", store=True)
+    prime_panier_impos = fields.Float("Prime de panier (imposable)", store=True)
     indemnite_respon = fields.Float("Indemnité de responsabilité", store=True)
     indemn_logement = fields.Float("Indemnité de logement", store=True)
     # indenm_fin_contract = fields.Float("Indemnité de fin de contrat", store=True)
@@ -21,6 +23,7 @@ class ContractInformations(models.Model):
     carburant = fields.Float("Indemnité Carburant", store=True)
     indemnite_kilom = fields.Float("Indemnité kilométrique(non commercial)", store=True)
     indemnite_kilom_com = fields.Float("Indemnité kilométrique(commercial)", store=True)
+    indemnite_kilom_impos = fields.Float("Indemnité kilométrique(imposable)", store=True)
     sortie = fields.Boolean("Sortie", store=False)
     motif  = fields.Selection([
         ('cdd', 'Fin de contrat'),

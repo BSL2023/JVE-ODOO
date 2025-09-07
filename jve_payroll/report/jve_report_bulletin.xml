@@ -77,7 +77,7 @@
                                         <tbody>
                                             <tr style="border-bottom:10px">
                                                 <td class="jve-background" style="text-align:left;padding-left:10px">
-                                                    Emploi
+                                                    Poste
                                                 </td>
                                                 <td style="text-align:center">
                                                     <span t-field="o.employee_id.job_id"/>
@@ -241,7 +241,7 @@
                                     </tr>
 
                                     <t t-foreach="o.line_ids" t-as="line">
-                                    <t t-if="line.code == 'INTRANSP' and line.amount > 26000">
+                                    <t t-if="line.code == 'INTRANSPIMP' and line.amount > 0">
                                     <tr class="bproll-espace-top">
 
                                         <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
@@ -249,7 +249,7 @@
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INTRANSP' and line.amount > 26000">
+                                                <t t-if="line.code == 'INTRANSPIMP' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -259,7 +259,7 @@
                                         </td>
                                         <td style="border-right:1px solid;text-align:center;padding-right:2px">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INTRANSP' and line.amount > 26000">
+                                                <t t-if="line.code == 'INTRANSPIMP' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -361,37 +361,7 @@
                                     </t>
 
                                     <t t-foreach="o.line_ids" t-as="line">
-                                    <t t-if="line.code == 'INRESP' and line.amount > 0">
-                                    <tr class="bproll-espace-top">
-
-                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
-                                                <center>Indemnité de responsabilité</center>
-                                        </td>
-                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
-                                            <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INRESP' and line.amount > 0">
-                                                    <span t-field="line.amount"/>
-                                                </t>
-                                            </t>
-                                        </td>
-                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
-                                            100
-                                        </td>
-                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
-                                            <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INRESP' and line.amount > 0">
-                                                    <span t-field="line.amount"/>
-                                                </t>
-                                            </t>
-                                        </td>
-                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
-                                        </td>
-                                    </tr>
-                                    </t>
-                                    </t>
-
-                                    <t t-foreach="o.line_ids" t-as="line">
-                                    <t t-if="line.code == 'INKIL' and line.amount > 50000">
+                                    <t t-if="line.code == 'INKILIMP' and line.amount > 0">
                                     <tr class="bproll-espace-top">
 
                                         <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
@@ -399,7 +369,7 @@
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INKIL' and line.amount > 50000">
+                                                <t t-if="line.code == 'INKILIMP' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -409,7 +379,7 @@
                                         </td>
                                         <td style="border-right:1px solid;text-align:center;padding-right:2px">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INKIL' and line.amount > 50000">
+                                                <t t-if="line.code == 'INKILIMP' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -421,7 +391,7 @@
                                     </t>
 
                                     <t t-foreach="o.line_ids" t-as="line">
-                                    <t t-if="line.code == 'PRPAN' and line.amount > 54000">
+                                    <t t-if="line.code == 'PRPANIMP' and line.amount > 0">
                                     <tr class="bproll-espace-top">
 
                                         <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
@@ -429,7 +399,7 @@
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'PRPAN' and line.amount > 54000">
+                                                <t t-if="line.code == 'PRPANIMP' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -439,7 +409,7 @@
                                         </td>
                                         <td style="border-right:1px solid;text-align:center;padding-right:2px">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'PRPAN' and line.amount > 54000">
+                                                <t t-if="line.code == 'PRPANIMP' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -747,14 +717,14 @@
                                     </tr>
 
                                     <t t-foreach="o.line_ids" t-as="line">
-                                    <t t-if="line.code == 'INTRANSP' and 1 &lt;= line.amount &lt;= 26000">
+                                    <t t-if="line.code == 'INTRANSP' and line.amount > 0">
                                     <tr class="bproll-espace-top">
                                         <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
                                                 <center>Indemnité de transport</center>
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INTRANSP' and 1 &lt;= line.amount &lt;= 26000">
+                                                <t t-if="line.code == 'INTRANSP' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -764,7 +734,7 @@
                                         </td>
                                         <td style="border-right:1px solid;text-align:center;padding-right:2px">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INTRANSP' and 1 &lt;= line.amount &lt;= 26000">
+                                                <t t-if="line.code == 'INTRANSP' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -776,15 +746,15 @@
                                     </t>
 
                                     <t t-foreach="o.line_ids" t-as="line">
-                                    <t t-if="line.code == 'INKIL' and 1 &lt;= line.amount &lt;= 50000">
+                                    <t t-if="line.code == 'INKILCOM' and line.amount > 0">
                                     <tr class="bproll-espace-top">
 
                                         <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
-                                                <center>Indemnité kilométrique</center>
+                                                <center>Indemnité kilométrique (commercial)</center>
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INKIL' and 1 &lt;= line.amount &lt;= 50000">
+                                                <t t-if="line.code == 'INKILCOM' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -794,7 +764,7 @@
                                         </td>
                                         <td style="border-right:1px solid;text-align:center;padding-right:2px">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INKIL' and 1 &lt;= line.amount &lt;= 50000">
+                                                <t t-if="line.code == 'INKILCOM' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -806,7 +776,37 @@
                                     </t>
 
                                     <t t-foreach="o.line_ids" t-as="line">
-                                    <t t-if="line.code == 'PRPAN' and 1 &lt;= line.amount &lt;= 54000">
+                                    <t t-if="line.code == 'INKILNONCOM' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Indemnité kilométrique (non commercial)</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INKILNONCOM' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INKILNONCOM' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'PRPAN' and line.amount > 0">
                                     <tr class="bproll-espace-top">
 
                                         <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
@@ -814,7 +814,7 @@
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'PRPAN' and 1 &lt;= line.amount &lt;= 54000">
+                                                <t t-if="line.code == 'PRPAN' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -824,7 +824,37 @@
                                         </td>
                                         <td style="border-right:1px solid;text-align:center;padding-right:2px">
                                             <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'IPRPAN' and 1 &lt;= line.amount &lt;= 54000">
+                                                <t t-if="line.code == 'PRPAN' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INRESP' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Indemnité de responsabilité</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INRESP' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INRESP' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -846,9 +876,9 @@
                                             
                                         </td>
                                         <td style="border-right:1px solid;text-align:center;padding-right:2px">
-                                            <!--<strong>
+                                            <strong>
                                                 <hr></hr>
-                                            </strong>-->
+                                            </strong>
                                             <strong>
                                                 <t t-foreach="o.line_ids" t-as="line">
                                                     <t t-if="line.code == 'TNI' and line.amount > 0">
@@ -861,6 +891,39 @@
                                         </td>
 
                                     </tr>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'RAT' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Retenue</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RAT' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <strong>
+                                                <hr></hr>
+                                            </strong>
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'RAT' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
 
                                     <!-- <tr class="bproll-espace-top">
 

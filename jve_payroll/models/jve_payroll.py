@@ -414,9 +414,12 @@ class PayrollValues(models.Model):
                 val.montant_anciennete = int(round(val.salaire_base * 0.25))
 
             val.salaire_brut = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
-                               val.contract_id.indemn_logement + val.contract_id.carburant
+                               val.contract_id.indemn_logement + val.contract_id.carburant + val.contract_id.indemnite_transport_impos + \
+                               val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
+            
             val.salaire_moyen = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
-                               val.contract_id.indemn_logement + val.contract_id.carburant
+                               val.contract_id.indemn_logement + val.contract_id.carburant + val.contract_id.indemnite_transport_impos + \
+                               val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
             if val.contract_id.sortie and val.contract_id.motif == 'licen':
                 if val.contract_id.employee_id.seniority_months <= 5:
                     val.indemn_licenciement = val.salaire_moyen * 0.25

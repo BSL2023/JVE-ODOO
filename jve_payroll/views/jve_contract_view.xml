@@ -37,14 +37,17 @@
                     <group>
                         <field name="indemnite_tel"/>
                         <field name="prime_panier"/>
+                        <field name="prime_panier_impos"/>
                         <field name="indemn_logement"/>
                         <field name="indemnite_kilom"/>
                         <field name="indemnite_kilom_com"/>
+                        <field name="indemnite_kilom_impos"/>
                         <!-- <field name="indenm_fin_contract"/>
                         <field name="indemn_retraite"/> -->
                     </group>
                     <group>
                         <field name="indemnite_transport"/>
+                        <field name="indemnite_transport_impos"/>
                         <!-- <field name="indemn_licenc"/>
                         <field name="indemn_deces"/> -->
                         <field name="carburant"/>
