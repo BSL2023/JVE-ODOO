@@ -33,7 +33,7 @@
                         <field name="sursalaire"/>
                     </group>
                 </group>
-                <group string="Indemnités">
+                <group string="Les indemnités">
                     <group>
                         <field name="indemnite_tel"/>
                         <field name="prime_panier"/>
