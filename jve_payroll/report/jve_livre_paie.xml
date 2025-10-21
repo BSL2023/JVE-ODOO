@@ -288,8 +288,8 @@
                                                 <span t-esc="s.impot_revenu + s.montant_ipress_cadre_employeur + s.montant_ipress_cadre_employe + s.montant_ipress_general_employee + s.montant_ipress_general_employeur"/>
                                             </TD>
                                         </t>
-                                    </TR>
-                                    <TR> -->
+                                    </TR> -->
+                                    <TR>
                                         <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
                                             Retenue
                                         </TD>
