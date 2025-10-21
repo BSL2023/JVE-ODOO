@@ -240,7 +240,7 @@
                                         </td>
                                     </tr>
 
-                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <!-- <t t-foreach="o.line_ids" t-as="line">
                                     <t t-if="line.code == 'INTRANSPIMP' and line.amount > 0">
                                     <tr class="bproll-espace-top">
 
@@ -268,7 +268,7 @@
                                         </td>
                                     </tr>
                                     </t>
-                                    </t>
+                                    </t> -->
 
                                     <t t-foreach="o.line_ids" t-as="line">
                                     <t t-if="line.code == 'INTEL' and line.amount > 0">
@@ -455,7 +455,8 @@
                                                 <center>CFCE</center>
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center">
-                                            <span t-field="o.base_calcul_allocation"/>
+                                            <!--<span t-field="o.base_calcul_allocation"/>-->
+                                            <span t-field="o.salaire_brut"/>
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
                                             3.0
@@ -504,7 +505,7 @@
                                             <span t-field="o.base_calcul_allocation"/>
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
-                                            3.0
+                                            1.0
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_second" style="text-align:center; border-right:1px solid;">
                                             
@@ -735,7 +736,8 @@
                                         <td style="border-right:1px solid;text-align:center;padding-right:2px">
                                             <t t-foreach="o.line_ids" t-as="line">
                                                 <t t-if="line.code == 'INTRANSP' and line.amount > 0">
-                                                    <span t-field="line.amount"/>
+                                                    <!-- <span t-field="line.amount"/> -->
+                                                    <span t-esc="o.indemnite_transport - o.surplus_transp"/>
                                                 </t>
                                             </t>
                                         </td>

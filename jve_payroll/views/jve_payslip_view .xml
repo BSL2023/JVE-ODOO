@@ -177,9 +177,9 @@
         </field>
     </record> -->
 
-    <record id="hr_nrt_livre_paie_view_tree" model="ir.ui.view">
-        <field name="name">hr.nrt.livre.paie.view.tree</field>
-        <field name="model">nrt.livre.paie</field>
+    <record id="hr_jve_livre_paie_view_tree" model="ir.ui.view">
+        <field name="name">hr.jve.livre.paie.view.tree</field>
+        <field name="model">jve.livre.paie</field>
         <field name="arch" type="xml">
             <list string="Livre de paie">
                 <field name="name" />
@@ -211,9 +211,9 @@
         </field>
     </record>
 
-    <record id="hr_bos_livre_paie_view_form" model="ir.ui.view">
-        <field name="name">hr.nrt.livre.paie.view.form</field>
-        <field name="model">nrt.livre.paie</field>
+    <record id="hr_jve_livre_paie_view_form" model="ir.ui.view">
+        <field name="name">hr.jve.livre.paie.view.form</field>
+        <field name="model">jve.livre.paie</field>
         <field name="arch" type="xml">
             <form string="Livre de paie">
                 <field name="name" />
@@ -558,9 +558,9 @@
 
     <record id="action_report_livre_paie" model="ir.actions.act_window">
         <field name="name">Livre de paie</field>
-        <field name="res_model">nrt.livre.paie</field>
+        <field name="res_model">jve.livre.paie</field>
         <field name="view_mode">list,form</field>
-        <field name="view_id" eval="hr_nrt_livre_paie_view_tree"/>
+        <field name="view_id" eval="hr_jve_livre_paie_view_tree"/>
     </record>
 
     <!-- <record id="action_send_dce" model="ir.actions.server">
@@ -671,7 +671,7 @@
     /> -->
 
     <menuitem
-            id="menu_hr_payroll_bos_livre_paie"
+            id="menu_hr_payroll_jve_livre_paie"
             name="Livre de paie"
             action="action_report_livre_paie"
             parent="menu_hr_payroll_social_contribution"

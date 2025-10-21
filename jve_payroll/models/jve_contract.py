@@ -5,7 +5,7 @@ class ContractInformations(models.Model):
     _inherit = 'hr.contract'
 
     indemnite_transport = fields.Float("Indemnité de transport", store=True)
-    indemnite_transport_impos = fields.Float("Indemnité de transport (imposable)", store=True)
+    # indemnite_transport_impos = fields.Float("Indemnité de transport (imposable)", store=True)
     indemnite_tel = fields.Float("Indemnité de téléphone", store=True)
     prime_panier = fields.Float("Prime de panier", store=True)
     prime_panier_impos = fields.Float("Prime de panier (imposable)", store=True)

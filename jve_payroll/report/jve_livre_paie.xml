@@ -1,14 +1,14 @@
 <odoo>
 
-    <record id="report_bos_livre_paie" model="ir.actions.report">
+    <record id="report_jve_livre_paie" model="ir.actions.report">
         <field name="name">Livre paie</field>
-        <field name="model">nrt.livre.paie</field>
+        <field name="model">jve.livre.paie</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">nrt_sirh_payroll_18.report_livre_paie_id</field>
-        <field name="report_file">nrt_sirh_payroll_18.report_livre_paie_id</field>
-        <field name="binding_model_id" ref="model_nrt_livre_paie"/>
+        <field name="report_name">jve_payroll.report_livre_paie_id</field>
+        <field name="report_file">jve_payroll.report_livre_paie_id</field>
+        <field name="binding_model_id" ref="model_jve_livre_paie"/>
         <field name="binding_type">report</field>
-        <field name="paperformat_id" ref="nrt_sirh_payroll_18.paperformat_payslip_group"/>
+        <field name="paperformat_id" ref="jve_payroll.paperformat_payslip_group"/>
     </record>
 
     <template id="report_livre_paie_id">
@@ -94,7 +94,7 @@
 
                                     <TR>
                                         <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
-                                            Carburant
+                                            Indemnité de carburant
                                         </TD>
                                         <t t-foreach="slip" t-as="s">
                                             <TD style="border-right:solid 1px;" align="center">
@@ -105,66 +105,99 @@
 
                                     <TR>
                                         <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
-                                            Avantage en nature
+                                            Indemnité de transport
                                         </TD>
                                         <t t-foreach="slip" t-as="s">
                                             <TD style="border-right:solid 1px;" align="center">
-                                                <span t-field="s.contract_id.avantage_nat"/>
+                                                <span t-field="s.contract_id.indemnite_transport"/>
                                             </TD>
                                         </t>
                                     </TR>
 
                                     <TR>
                                         <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
-                                            Restauration
+                                            Indemnité de responsabilité
                                         </TD>
                                         <t t-foreach="slip" t-as="s">
                                             <TD style="border-right:solid 1px;" align="center">
-                                                <span t-field="s.contract_id.restaurant"/>
+                                                <span t-field="s.contract_id.indemnite_respon"/>
                                             </TD>
                                         </t>
                                     </TR>
 
                                     <TR>
                                         <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
-                                            Indemnité de préavis
+                                            Indemnité de téléphone
                                         </TD>
                                         <t t-foreach="slip" t-as="s">
                                             <TD style="border-right:solid 1px;" align="center">
-                                                <span t-field="s.indemn_preavis"/>
+                                                <span t-field="s.contract_id.indemnite_tel"/>
                                             </TD>
                                         </t>
                                     </TR>
 
                                     <TR>
                                         <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
-                                            Prime de Transport
+                                            Prime de panier
                                         </TD>
                                         <t t-foreach="slip" t-as="s">
                                             <TD style="border-right:solid 1px;" align="center">
-                                                <span t-field="s.contract_id.prime_transport"/>
+                                                <span t-field="s.contract_id.prime_panier"/>
                                             </TD>
                                         </t>
                                     </TR>
 
                                     <TR>
                                         <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
-                                            Prime de salissure
+                                            Prime de panier (imposable)
                                         </TD>
                                         <t t-foreach="slip" t-as="s">
                                             <TD style="border-right:solid 1px;" align="center">
-                                                <span t-field="s.prime_salissure"/>
+                                                <span t-field="s.contract_id.prime_panier_impos"/>
                                             </TD>
                                         </t>
                                     </TR>
 
                                     <TR>
                                         <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
-                                            Prime exceptionnelle
+                                            Indemnité de logement
                                         </TD>
                                         <t t-foreach="slip" t-as="s">
                                             <TD style="border-right:solid 1px;" align="center">
-                                                <span t-field="s.contract_id.prime_excep"/>
+                                                <span t-field="s.contract_id.indemn_logement"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Indemnite kilométrique (non commercial)
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.contract_id.indemnite_kilom"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Indemnite kilométrique (commercial)
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.contract_id.indemnite_kilom_com"/>
+                                            </TD>
+                                        </t>
+                                    </TR>
+
+                                    <TR>
+                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
+                                            Indemnite kilométrique (imposable)
+                                        </TD>
+                                        <t t-foreach="slip" t-as="s">
+                                            <TD style="border-right:solid 1px;" align="center">
+                                                <span t-field="s.contract_id.indemnite_kilom_impos"/>
                                             </TD>
                                         </t>
                                     </TR>
@@ -246,34 +279,23 @@
                                         </t>
                                     </TR>
 
-                                    <TR style="border:solid 1px;">
+                                    <!-- <TR style="border:solid 1px;">
                                         <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
                                             <strong>TOTAL COTISATIONS</strong>
                                         </TD>
                                         <t t-foreach="slip" t-as="s">
                                             <TD style="border-right:solid 1px;" align="center">
-                                                <span t-esc="s.montant_ipress_cadre_employeur + s.montant_ipress_cadre_employe + s.montant_ipress_general_employee + s.montant_ipress_general_employeur"/>
+                                                <span t-esc="s.impot_revenu + s.montant_ipress_cadre_employeur + s.montant_ipress_cadre_employe + s.montant_ipress_general_employee + s.montant_ipress_general_employeur"/>
                                             </TD>
                                         </t>
                                     </TR>
-                                    <TR>
+                                    <TR> -->
                                         <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
-                                            Retenue assurance maladie
+                                            Retenue
                                         </TD>
                                         <t t-foreach="slip" t-as="s">
                                             <TD style="border-right:solid 1px;" align="center">
-                                                <span t-field="s.contract_id.retenue_assurance"/>
-                                            </TD>
-                                        </t>
-                                    </TR>
-
-                                    <TR>
-                                        <TD style="border-right:solid 1px; padding-left:12px; background-color: #C0C0C0">
-                                            Total Retenues
-                                        </TD>
-                                        <t t-foreach="slip" t-as="s">
-                                            <TD style="border-right:solid 1px;" align="center">
-                                                <span t-field="s.avance"/>
+                                                <span t-field="s.contract_id.retenue"/>
                                             </TD>
                                         </t>
                                     </TR>

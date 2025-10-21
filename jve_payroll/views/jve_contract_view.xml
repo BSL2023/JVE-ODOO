@@ -47,8 +47,8 @@
                     </group>
                     <group>
                         <field name="indemnite_transport"/>
-                        <field name="indemnite_transport_impos"/>
-                        <!-- <field name="indemn_licenc"/>
+                        <!-- <field name="indemnite_transport_impos"/>
+                        <field name="indemn_licenc"/>
                         <field name="indemn_deces"/> -->
                         <field name="carburant"/>
                         <field name="indemnite_respon"/>

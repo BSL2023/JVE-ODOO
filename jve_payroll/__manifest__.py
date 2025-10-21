@@ -25,7 +25,7 @@ Accélérer la transformation numérique sociétale et environnementale de l’A
         'security/ir.model.access.csv',
         #'security/security.xml',
         'report/jve_report_bulletin.xml',
-        # 'report/jve_livre_paie.xml',
+        'report/jve_livre_paie.xml',
         #'report/nrt_cotisation_sociale.xml',
         #'report/nrt_retenues_fiscales.xml',
         #'report/nrt_report_fichier_controle.xml',

@@ -237,6 +237,7 @@ class PayrollValues(models.Model):
     impot_revenu = fields.Integer('Impôt sur le revenu', compute='_compute_impot_mensuel', store=True)
     base_fiscal_abatt = fields.Integer('Base fiscale après abattement', compute='_compute_impot_mensuel', store=True)
     indemnite_transport = fields.Integer('Indemnité de transport', compute='_compute_salaire', store=True)
+    surplus_transp = fields.Integer('Indemnité de transport imposable', compute='_compute_salaire', store=True)
     indemn_preavis = fields.Integer('Indemnité de préavis', compute='_compute_salaire', store=True)
     salaire_net = fields.Integer('Salaire net', compute='_compute_cotisation', store=True)
     total_cotisation = fields.Integer('Total des cotisations', compute='_compute_cotisation', store=True)
@@ -360,7 +361,8 @@ class PayrollValues(models.Model):
                     if a.code == 'WORK100':
                         nbre_jours += a.number_of_days
                         print('Number of days', nbre_jours)
-            val.indemnite_transport = round((val.contract_id.indemnite_transport * nbre_jours) / 30)
+            # val.indemnite_transport = round((val.contract_id.indemnite_transport * nbre_jours) / 30)
+            val.indemnite_transport = val.contract_id.indemnite_transport
             val.salaire_base = round((val.contract_id.wage * nbre_jours) / 30)
             val.sursalaire = round((val.contract_id.sursalaire * nbre_jours) / 30)
 
@@ -413,13 +415,28 @@ class PayrollValues(models.Model):
             if val.employee_id.seniority_months >= 301:
                 val.montant_anciennete = int(round(val.salaire_base * 0.25))
 
-            val.salaire_brut = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
-                               val.contract_id.indemn_logement + val.contract_id.carburant + val.contract_id.indemnite_transport_impos + \
+            # val.salaire_brut = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
+            #                   val.contract_id.indemn_logement + val.contract_id.carburant + val.contract_id.indemnite_transport_impos + \
+            #                   val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
+            if val.contract_id.indemnite_transport <= 26000:
+                val.salaire_brut = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
+                               val.contract_id.indemn_logement + val.contract_id.carburant + \
+                               val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
+                val.salaire_moyen = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
+                               val.contract_id.indemn_logement + val.contract_id.carburant + \
+                               val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
+            if val.contract_id.indemnite_transport > 26000:
+                val.surplus_transp = val.contract_id.indemnite_transport - 26000
+                val.salaire_brut = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
+                               val.contract_id.indemn_logement + val.contract_id.carburant + val.surplus_transp + \
+                               val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
+                val.salaire_moyen = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
+                               val.contract_id.indemn_logement + val.contract_id.carburant + val.surplus_transp + \
                                val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
             
-            val.salaire_moyen = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
-                               val.contract_id.indemn_logement + val.contract_id.carburant + val.contract_id.indemnite_transport_impos + \
-                               val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
+            # val.salaire_moyen = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
+            #                    val.contract_id.indemn_logement + val.contract_id.carburant + val.contract_id.indemnite_transport_impos + \
+            #                    val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
             if val.contract_id.sortie and val.contract_id.motif == 'licen':
                 if val.contract_id.employee_id.seniority_months <= 5:
                     val.indemn_licenciement = val.salaire_moyen * 0.25
@@ -592,7 +609,7 @@ class PayrollValues(models.Model):
             cot.taux_ipress_cadre_employe = 0.024
             cot.taux_ipress_cadre_employeur = 0.036
             cot.taux_allocation_familiale = 0.07
-            cot.taux_accident_travail = 0.03
+            cot.taux_accident_travail = 0.01
             cot.taux_cfce = 0.03
             if cot.struct_id.name == 'Régime non cadre':
                 if cot.salaire_brut > 63000:
@@ -666,7 +683,18 @@ class PayrollValues(models.Model):
                 print("Total cotisation employeur cadre", cot.total_cotisation_employeur)
                 cot.total_retenue = int(cot.impot_revenu)
 
-            cot.total_non_imposable = cot.indemnite_transport + \
+            # cot.total_non_imposable = cot.indemnite_transport + \
+            #                           cot.contract_id.prime_panier + cot.indemn_retraite + cot.indemn_deces + \
+            #                           cot.indemn_licenciement + \
+            #                           cot.contract_id.indemnite_respon + cot.contract_id.indemnite_kilom + cot.contract_id.indemnite_kilom_com + cot.indemn_fin_cdd
+            if cot.contract_id.indemnite_transport <= 26000:
+                cot.total_non_imposable = cot.indemnite_transport + \
+                                      cot.contract_id.prime_panier + cot.indemn_retraite + cot.indemn_deces + \
+                                      cot.indemn_licenciement + \
+                                      cot.contract_id.indemnite_respon + cot.contract_id.indemnite_kilom + cot.contract_id.indemnite_kilom_com + cot.indemn_fin_cdd
+            if cot.contract_id.indemnite_transport > 26000:
+                cot.surplus_transp = cot.contract_id.indemnite_transport - 26000
+                cot.total_non_imposable = (cot.indemnite_transport - cot.surplus_transp) + \
                                       cot.contract_id.prime_panier + cot.indemn_retraite + cot.indemn_deces + \
                                       cot.indemn_licenciement + \
                                       cot.contract_id.indemnite_respon + cot.contract_id.indemnite_kilom + cot.contract_id.indemnite_kilom_com + cot.indemn_fin_cdd
@@ -948,7 +976,7 @@ class PayrollValues(models.Model):
 
 
 class LivrePaieNRT(models.Model):
-    _name = 'nrt.livre.paie'
+    _name = 'jve.livre.paie'
     _description = 'Ensemble des éléments de salaire pour chaque employé'
 
     name = fields.Char('Nom', required=True, store=True)
@@ -961,6 +989,7 @@ class LivrePaieNRT(models.Model):
     sur_sal = fields.Float('Sursalaire', compute='_compute_total_values', store=True)
     carburant = fields.Float('Carburant', compute='_compute_total_values', store=True)
     
+    indemn_responsabilite = fields.Float('Indemnité de responsabilité', compute='_compute_total_values', store=True)
     prime_panier = fields.Float('Indemnité compensatrice', compute='_compute_total_values', store=True)
     prime_transp = fields.Float('Indemnité de transport', compute='_compute_total_values', store=True)
     brut_impos = fields.Float('Brut imposable', compute='_compute_total_values', store=True)
@@ -996,8 +1025,9 @@ class LivrePaieNRT(models.Model):
                     x.sal_base += val.salaire_base
                     x.sur_sal += val.sursalaire
                     x.carburant += val.contract_id.carburant
-                    x.prime_panier += val.prime_panier
+                    # x.prime_panier += val.prime_panier
                     x.prime_transp += val.contract_id.indemnite_transport
+                    x.indemn_responsabilite += val.contract_id.indemnite_respon
                     x.brut_impos += val.salaire_brut
                     x.imp_rev += val.impot_revenu
                     x.trimf += val.trimf
@@ -1006,7 +1036,7 @@ class LivrePaieNRT(models.Model):
                     x.ipres_rc += val.montant_ipress_cadre_employe
                     x.ipres_rc_pat += val.montant_ipress_cadre_employeur
                     x.total_cot = val.montant_ipress_general_employee + val.montant_ipress_general_employeur + val.montant_ipress_cadre_employe + val.montant_ipress_cadre_employeur
-                    x.retenue_assur += val.contract_id.retenue
+                    # x.retenue_assur += val.contract_id.retenue
                     x.total_salar += val.total_cotisation_employe
                     x.total_patr += val.total_cotisation_employeur
                     x.net_payer += val.salaire_net
