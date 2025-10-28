@@ -240,12 +240,12 @@
                                         </td>
                                     </tr>
 
-                                    <!-- <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-foreach="o.line_ids" t-as="line">
                                     <t t-if="line.code == 'INTRANSPIMP' and line.amount > 0">
                                     <tr class="bproll-espace-top">
 
                                         <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
-                                                <center>Indemnité de transport</center>
+                                                <center>Indemnité de transport (imposable)</center>
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
                                             <t t-foreach="o.line_ids" t-as="line">
@@ -268,7 +268,7 @@
                                         </td>
                                     </tr>
                                     </t>
-                                    </t> -->
+                                    </t>
 
                                     <t t-foreach="o.line_ids" t-as="line">
                                     <t t-if="line.code == 'INTEL' and line.amount > 0">
@@ -410,6 +410,36 @@
                                         <td style="border-right:1px solid;text-align:center;padding-right:2px">
                                             <t t-foreach="o.line_ids" t-as="line">
                                                 <t t-if="line.code == 'PRPANIMP' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
+                                        </td>
+                                    </tr>
+                                    </t>
+                                    </t>
+
+                                    <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-if="line.code == 'INRESP' and line.amount > 0">
+                                    <tr class="bproll-espace-top">
+
+                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
+                                                <center>Indemnité de responsabilité</center>
+                                        </td>
+                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INRESP' and line.amount > 0">
+                                                    <span t-field="line.amount"/>
+                                                </t>
+                                            </t>
+                                        </td>
+                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
+                                            100
+                                        </td>
+                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <t t-if="line.code == 'INRESP' and line.amount > 0">
                                                     <span t-field="line.amount"/>
                                                 </t>
                                             </t>
@@ -837,36 +867,6 @@
                                     </t>
                                     </t>
 
-                                    <t t-foreach="o.line_ids" t-as="line">
-                                    <t t-if="line.code == 'INRESP' and line.amount > 0">
-                                    <tr class="bproll-espace-top">
-
-                                        <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
-                                                <center>Indemnité de responsabilité</center>
-                                        </td>
-                                        <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
-                                            <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INRESP' and line.amount > 0">
-                                                    <span t-field="line.amount"/>
-                                                </t>
-                                            </t>
-                                        </td>
-                                        <td class="bpro_head_label_third" style="text-align:center;border-left: 1px solid;border-right:1px solid; padding-left:1px">
-                                            100
-                                        </td>
-                                        <td style="border-right:1px solid;text-align:center;padding-right:2px">
-                                            <t t-foreach="o.line_ids" t-as="line">
-                                                <t t-if="line.code == 'INRESP' and line.amount > 0">
-                                                    <span t-field="line.amount"/>
-                                                </t>
-                                            </t>
-                                        </td>
-                                        <td class="bpro_head_label_third" style="text-align:center;padding-right:2px">
-                                        </td>
-                                    </tr>
-                                    </t>
-                                    </t>
-
                                     <tr class="sous-totaux">
                                         <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
                                                 <center><strong>TOTAL NON IMPOSABLE</strong></center>
@@ -899,7 +899,7 @@
                                     <tr class="bproll-espace-top">
 
                                         <td class="bpro_padding_left bpro_head_label_first" style="padding-left: 20px">
-                                                <center>Retenue</center>
+                                                <center>Retenue IPM</center>
                                         </td>
                                         <td class="bpro_border_left bpro_head_label_third" style="text-align:center">
                                             <t t-foreach="o.line_ids" t-as="line">

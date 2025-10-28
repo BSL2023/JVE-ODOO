@@ -15,7 +15,7 @@ class ContractInformations(models.Model):
     # indemn_licenc = fields.Float("Indemnité de licenciement", store=True)
     # indemn_retraite = fields.Float("Indemnité de départ à la retraite", store=True)
     # indemn_deces = fields.Float("Indemnité de décès", store=True)
-    retenue = fields.Float("Retenue", store=True)
+    retenue_ipm = fields.Float("Retenue IPM", store=True)
     category = fields.Many2one('hr.salary', "Catégorie salariale", store=True)
     wage = fields.Integer('Salaire de base', required=True, tracking=True, help="Employee's monthly gross wage.", related="category.salary")
     sursalaire = fields.Float("Sursalaire", store=True)

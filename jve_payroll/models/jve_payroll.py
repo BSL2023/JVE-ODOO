@@ -421,18 +421,18 @@ class PayrollValues(models.Model):
             if val.contract_id.indemnite_transport <= 26000:
                 val.salaire_brut = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
                                val.contract_id.indemn_logement + val.contract_id.carburant + \
-                               val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
+                               val.contract_id.indemnite_respon + val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
                 val.salaire_moyen = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
                                val.contract_id.indemn_logement + val.contract_id.carburant + \
-                               val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
+                               val.contract_id.indemnite_respon + val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
             if val.contract_id.indemnite_transport > 26000:
                 val.surplus_transp = val.contract_id.indemnite_transport - 26000
                 val.salaire_brut = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
                                val.contract_id.indemn_logement + val.contract_id.carburant + val.surplus_transp + \
-                               val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
+                               val.contract_id.indemnite_respon + val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
                 val.salaire_moyen = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
                                val.contract_id.indemn_logement + val.contract_id.carburant + val.surplus_transp + \
-                               val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
+                               val.contract_id.indemnite_respon + val.contract_id.prime_panier_impos + val.contract_id.indemnite_kilom_impos
             
             # val.salaire_moyen = val.salaire_base + val.sursalaire + val.contract_id.indemnite_tel + \
             #                    val.contract_id.indemn_logement + val.contract_id.carburant + val.contract_id.indemnite_transport_impos + \
@@ -691,18 +691,18 @@ class PayrollValues(models.Model):
                 cot.total_non_imposable = cot.indemnite_transport + \
                                       cot.contract_id.prime_panier + cot.indemn_retraite + cot.indemn_deces + \
                                       cot.indemn_licenciement + \
-                                      cot.contract_id.indemnite_respon + cot.contract_id.indemnite_kilom + cot.contract_id.indemnite_kilom_com + cot.indemn_fin_cdd
+                                      cot.contract_id.indemnite_kilom + cot.contract_id.indemnite_kilom_com + cot.indemn_fin_cdd
             if cot.contract_id.indemnite_transport > 26000:
                 cot.surplus_transp = cot.contract_id.indemnite_transport - 26000
                 cot.total_non_imposable = (cot.indemnite_transport - cot.surplus_transp) + \
                                       cot.contract_id.prime_panier + cot.indemn_retraite + cot.indemn_deces + \
                                       cot.indemn_licenciement + \
-                                      cot.contract_id.indemnite_respon + cot.contract_id.indemnite_kilom + cot.contract_id.indemnite_kilom_com + cot.indemn_fin_cdd
+                                      cot.contract_id.indemnite_kilom + cot.contract_id.indemnite_kilom_com + cot.indemn_fin_cdd
             # print("Total non imposable", cot.total_non_imposable)
             #########################################################################
             #                           BON
             ##########################################################################
-            cot.salaire_net = cot.salaire_brut - cot.total_cotisation_employe - cot.contract_id.retenue + \
+            cot.salaire_net = cot.salaire_brut - cot.total_cotisation_employe - cot.contract_id.retenue_ipm + \
                               cot.total_non_imposable
             print("Salaire net", cot.salaire_net)
 

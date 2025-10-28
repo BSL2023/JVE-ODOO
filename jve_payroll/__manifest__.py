@@ -14,7 +14,7 @@
     'description': """
 Accélérer la transformation numérique sociétale et environnementale de l’Afrique par des services innovants et créateurs de valeurs.
     """,
-    'depends': ['hr_payroll', 'hr', 'hr_contract'],
+    'depends': ['account', 'account_accountant', 'hr_payroll', 'hr', 'hr_contract'],
 
     'assets': {
         'web.assets_qweb': [

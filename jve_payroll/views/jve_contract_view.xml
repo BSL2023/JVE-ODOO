@@ -56,7 +56,7 @@
                 </group>
                 <group string="Retenues">
                     <group>
-                        <field name="retenue"/>
+                        <field name="retenue_ipm"/>
                     </group>
                 </group>
             </xpath>

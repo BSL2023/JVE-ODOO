@@ -678,6 +678,8 @@
             sequence="70"
     />
 
+    <menuitem id="hr_payroll.hr_menu_salary_attachments" active="False"/>
+
     <!-- <menuitem
             id="menu_hr_payroll_fichier_controle"
             name="Fichier de contrôle"
