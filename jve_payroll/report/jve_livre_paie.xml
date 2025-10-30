@@ -295,7 +295,7 @@
                                         </TD>
                                         <t t-foreach="slip" t-as="s">
                                             <TD style="border-right:solid 1px;" align="center">
-                                                <span t-field="s.contract_id.retenue"/>
+                                                <span t-field="s.contract_id.retenue_ipm"/>
                                             </TD>
                                         </t>
                                     </TR>

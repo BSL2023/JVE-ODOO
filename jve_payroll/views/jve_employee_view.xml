@@ -20,9 +20,9 @@
             <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group/group[@name='emergency']/field[@name='spouse_birthdate']" position="replace">
                 <field name="spouse_birthdate" invisible="1"/>
             </xpath>
-            <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group/group[@name='emergency']/field[@name='children']" position="replace">
+            <!-- <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group/group[@name='emergency']/field[@name='children']" position="replace">
                 <field name="children" invisible="marital not in ['married', 'cohabitant']"/>
-            </xpath>
+            </xpath> -->
             <xpath expr="//form/sheet/notebook/page[@name='personal_information']/group/group[@name='emergency']/field[@name='marital']" position="before">
                 <field name="husband_wife_status" invisible="marital not in ['married', 'cohabitant']"/>
             </xpath>
